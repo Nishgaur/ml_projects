@@ -1,0 +1,45 @@
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+
+# Set a seed for reproducibility
+np.random.seed(42)
+
+# Generate synthetic weather data
+date_rng = pd.date_range(start='2022-01-01', end='2023-12-31', freq='D')
+temperature_data = 20 + np.cumsum(np.random.randn(len(date_rng)))  # Additive trend
+seasonal_pattern = 5 * np.sin(2 * np.pi * (date_rng.dayofyear / 365.25))  # Additive seasonal pattern
+weather_data_additive = temperature_data + seasonal_pattern + np.random.normal(scale=2, size=len(date_rng))
+
+# Create a DataFrame
+weather_df_additive = pd.DataFrame({'Date': date_rng, 'Temperature': weather_data_additive})
+
+# Plot the time series and components
+plt.figure(figsize=(12, 8))
+
+# Plot the time series
+plt.subplot(3, 1, 1)
+plt.plot(weather_df_additive['Date'], weather_df_additive['Temperature'], label='Weather Data')
+plt.title('Weather Data with Additive Components')
+plt.xlabel('Date')
+plt.ylabel('Temperature')
+plt.legend()
+
+# Plot the trend
+plt.subplot(3, 1, 2)
+plt.plot(weather_df_additive['Date'], temperature_data, label='Additive Trend', color='orange')
+plt.title('Additive Trend')
+plt.xlabel('Date')
+plt.ylabel('Temperature')
+plt.legend()
+
+# Plot the seasonal pattern
+plt.subplot(3, 1, 3)
+plt.plot(weather_df_additive['Date'], seasonal_pattern, label='Additive Seasonal Pattern', color='green')
+plt.title('Additive Seasonal Pattern')
+plt.xlabel('Date')
+plt.ylabel('Temperature')
+plt.legend()
+
+plt.tight_layout()
+plt.show()
